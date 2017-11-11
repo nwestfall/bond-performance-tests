@@ -19,6 +19,8 @@ namespace Bond.PerformanceTest
             Console.WriteLine("Protobuf.NET size:    {0} bytes", benchmarks.ProtobufNet());
             Console.WriteLine("Compact Bond:         {0} bytes", benchmarks.CompactBond());
             Console.WriteLine("Fast Bond:            {0} bytes", benchmarks.FastBond());
+            Console.WriteLine("JSON:                 {0} bytes", benchmarks.JSON());
+            Console.WriteLine("XML:                  {0} bytes", benchmarks.XML());
         }
     }
 }

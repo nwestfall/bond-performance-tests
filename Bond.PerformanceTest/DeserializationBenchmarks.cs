@@ -3,6 +3,8 @@ using System.Linq;
 using BenchmarkDotNet.Attributes;
 using Bond.IO.Safe;
 using Bond.Protocols;
+using Newtonsoft.Json;
+using System.Xml.Serialization;
 
 namespace Bond.PerformanceTest
 {
@@ -16,6 +18,9 @@ namespace Bond.PerformanceTest
         private readonly Deserializer<FastBinaryReader<InputBuffer>> fastBondDeserializer = new Deserializer<FastBinaryReader<InputBuffer>>(typeof(Bond.Person));
         private byte[] compactBondPersonBytes;
         private byte[] fastBondPersonBytes;
+
+        private string jsonPerson;
+        private byte[] xmlPersonBytes;
 
         [Setup]
         public void Setup()
@@ -39,6 +44,13 @@ namespace Bond.PerformanceTest
             var fastBondSerializer = new Serializer<FastBinaryWriter<OutputBuffer>>(typeof(Bond.Person));
             fastBondSerializer.Serialize(bondPerson, fastWriter);
             fastBondPersonBytes = fastOutput.Data.ToArray();
+
+            jsonPerson = JsonConvert.SerializeObject(BenchmarksData.JSONPerson());
+
+            var xmlSerializer = new XmlSerializer(typeof(XML.Person));
+            var xmlStream = new MemoryStream();
+            xmlSerializer.Serialize(xmlStream, BenchmarksData.XMLPerson());
+            xmlPersonBytes = xmlStream.ToArray();
         }
 
         [Benchmark]
@@ -68,6 +80,20 @@ namespace Bond.PerformanceTest
             var input = new InputBuffer(fastBondPersonBytes);
             var reader = new FastBinaryReader<InputBuffer>(input);
             fastBondDeserializer.Deserialize<Bond.Person>(reader);
+        }
+
+        [Benchmark]
+        public void JSON()
+        {
+            JsonConvert.DeserializeObject<JSON.Person>(jsonPerson);
+        }
+
+        [Benchmark]
+        public void XML()
+        {
+            var serializer = new XmlSerializer(typeof(XML.Person));
+            var memoryStream = new MemoryStream(xmlPersonBytes);
+            serializer.Deserialize(memoryStream);
         }
     }
 }

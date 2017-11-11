@@ -72,5 +72,57 @@ namespace Bond.PerformanceTest
             };
             return result;
         }
+
+        public static JSON.Person JSONPerson()
+        {
+            var result = new JSON.Person
+            {
+                firstName = "Test",
+                lastName = "Person",
+                age = 22,
+                gender = JSON.Gender.Male,
+                policeRecords =
+                {
+                    new JSON.PoliceRecord
+                    {
+                        crime = "crime1",
+                        id = 1
+                    },
+                    new JSON.PoliceRecord
+                    {
+                        crime = "some crime with very very very very very long description. asldg ;askdg a;sdgjk asdgjahsd asd gasd asdjgahsl dgasldjgh",
+                        id = 2
+                    }
+                }
+            };
+
+            return result;
+        }
+
+        public static XML.Person XMLPerson()
+        {
+            var result = new XML.Person
+            {
+                firstName = "Test",
+                lastName = "Person",
+                age = 22,
+                gender = XML.Gender.Male,
+                policeRecords =
+                {
+                    new XML.PoliceRecord
+                    {
+                        crime = "crime1",
+                        id = 1
+                    },
+                    new XML.PoliceRecord
+                    {
+                        crime = "some crime with very very very very very long description. asldg ;askdg a;sdgjk asdgjahsd asd gasd asdjgahsl dgasldjgh",
+                        id = 2
+                    }
+                }
+            };
+
+            return result;
+        }
     }
 }
